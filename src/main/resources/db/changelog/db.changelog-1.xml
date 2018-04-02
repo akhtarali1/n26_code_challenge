@@ -1,0 +1,30 @@
+<databaseChangeLog logicalFilePath="release-1.0/db.changelog-1.xml"
+                   xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+    <changeSet id="Create table N26_TRANSACTIONS and SEQ " author="akhtar" failOnError="true">
+        <createTable catalogName="n26" tableName="N26_TRANSACTIONS">
+            <column name="ID" type="NUMBER(19)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="AMOUNT" type="REAL">
+                <constraints nullable="false"/>
+            </column>
+            <column name="TRANSACTION_TIME" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <createSequence catalogName="n26"
+                        cycle="true"
+                        incrementBy="1"
+                        sequenceName="N26_TRANSACTION_SEQ"
+                        startValue="1"/>
+
+        <rollback>
+            <dropTable cascadeConstraints="true" catalogName="n26"
+                       tableName="N26_TRANSACTIONS"/>
+            <dropSequence catalogName="n26" sequenceName="N26_TRANSACTION_SEQ"/>
+        </rollback>
+    </changeSet>
+
+</databaseChangeLog>
