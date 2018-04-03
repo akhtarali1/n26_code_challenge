@@ -57,7 +57,7 @@ public class TransactionControllerTest {
     }
 
     @Test
-    public void postTransactionsWithInValidTime() throws Exception {
+    public void postTransactionsWithInValidTransaction() throws Exception {
         given(transactionsService.saveTransactions(any(Transaction.class))).willReturn(false);
         mockMvc.perform(post(URL)
                         .contentType(APPLICATION_JSON)
@@ -74,5 +74,27 @@ public class TransactionControllerTest {
                         .andExpect(status().isInternalServerError())
                         .andExpect(jsonPath("$.code").value(1000))
                         .andExpect(jsonPath("$.description").value("exception occurred"));
+    }
+
+    @Test
+    public void postTransactionsWithInValidAmount() throws Exception {
+        given(transactionsService.saveTransactions(any(Transaction.class))).willReturn(true);
+        mockMvc.perform(post(URL)
+                        .contentType(APPLICATION_JSON)
+                        .content(convertJsonToStringFromFile("InValidAmountTransaction.json")))
+                        .andExpect(status().isBadRequest())
+                        .andExpect(jsonPath("$.code").value(3000))
+                        .andExpect(jsonPath("$.description").value("amount must be greater than or equal to 0.01"));
+    }
+
+    @Test
+    public void postTransactionsWithInValidTime() throws Exception {
+        given(transactionsService.saveTransactions(any(Transaction.class))).willReturn(true);
+        mockMvc.perform(post(URL)
+                        .contentType(APPLICATION_JSON)
+                        .content(convertJsonToStringFromFile("InValidTimeTransaction.json")))
+                        .andExpect(status().isBadRequest())
+                        .andExpect(jsonPath("$.code").value(3000))
+                        .andExpect(jsonPath("$.description").value("timeStamp must be greater than or equal to 0"));
     }
 }

@@ -4,6 +4,7 @@
  */
 package com.n26.challenge.backendrest.controller;
 
+import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 
 import com.n26.challenge.backendrest.domain.Error;
@@ -25,7 +26,7 @@ public class ExceptionHandlerController {
      * @return error with status code
      */
     @ExceptionHandler(value = N26Exception.class)
-    @ResponseStatus(INTERNAL_SERVER_ERROR)
+    @ResponseStatus(BAD_REQUEST)
     public Error handleN26Exception(N26Exception exception) {
         log.error("Unexpected exception thrown from service, {}", exception.getMessage());
         return exception.getError();
