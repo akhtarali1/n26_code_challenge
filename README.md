@@ -11,9 +11,9 @@ knowledge of Java 1.8,H2 In-memory DB and SpringBoot is required.
 
 Exposing API for saving Transaction  and statistics view.<br />
 Used Java 1.8 with spring boot in combination with H2 In-memory DB for data storing.<br />
-Data Base state can be viewed using below URL
-http://localhost:8080/h2-console
-username=sa
+Data Base state can be viewed using below <br />
+URL http://localhost:8080/h2-console<br />
+username=sa<br />
 password=sa
 
 ####API URLS
