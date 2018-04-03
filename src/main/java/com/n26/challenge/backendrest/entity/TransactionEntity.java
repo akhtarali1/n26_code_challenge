@@ -4,10 +4,8 @@
  */
 package com.n26.challenge.backendrest.entity;
 
-import com.n26.challenge.backendrest.domain.Transaction;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -15,7 +13,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
-import java.sql.Timestamp;
 
 /**
  * @author Akhtar on 02-Apr-18.
@@ -38,7 +35,7 @@ public class TransactionEntity {
     private long transactionTime;
 
     /**
-     * @param amount transaction amount
+     * @param amount          transaction amount
      * @param transactionTime transaction time
      */
     public TransactionEntity(double amount, long transactionTime) {

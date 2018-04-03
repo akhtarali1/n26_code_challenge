@@ -7,14 +7,12 @@ package com.n26.challenge.backendrest.service;
 import com.n26.challenge.backendrest.domain.Transaction;
 import com.n26.challenge.backendrest.entity.TransactionEntity;
 import com.n26.challenge.backendrest.repository.TransactionsRepository;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 /**
  * @author Akhtar on 02-Apr-18.
  */
 @Service
-@Slf4j
 public class TransactionsServiceImpl {
 
     private static final int SIXTY_SECONDS = 60 * 1000;

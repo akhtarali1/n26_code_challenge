@@ -4,15 +4,15 @@
  */
 package com.n26.challenge.backendrest.domain;
 
-import lombok.Data;
+import lombok.Getter;
 
 import java.io.Serializable;
 
 /**
  * @author Akhtar on 02-Apr-18.
  */
-@Data
-public class Statistics implements Serializable{
+@Getter
+public class Statistics implements Serializable {
 
     private static final long serialVersionUID = 1L;
     private Double sum;
@@ -22,11 +22,11 @@ public class Statistics implements Serializable{
     private Long count;
 
     /**
-     * @param sum of all transactions happened im time frame
+     * @param sum     of all transactions happened im time frame
      * @param average of all transactions happened im time frame
-     * @param max of all transactions happened im time frame
-     * @param min of all transactions happened im time frame
-     * @param count of all transactions happened im time frame
+     * @param max     of all transactions happened im time frame
+     * @param min     of all transactions happened im time frame
+     * @param count   of all transactions happened im time frame
      */
     public Statistics(Double sum, Double average, Double max, Double min, Long count) {
         this.sum = sum;

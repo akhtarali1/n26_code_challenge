@@ -34,6 +34,11 @@ public class StatisticsControllerTest {
     @MockBean
     private StatisticsServiceImpl statisticsService;
 
+    /**
+     * Get statistics from controller
+     *
+     * @throws Exception
+     */
     @Test
     public void getStatistics() throws Exception {
         given(statisticsService.getStatisticsForTime()).willReturn(new Statistics(10.5D, 10.6D, 10.4D, 10.3D, 10L));
@@ -47,12 +52,17 @@ public class StatisticsControllerTest {
                         .andExpect(jsonPath("$.count").value(10));
     }
 
+    /**
+     * Error returned by translating N26Exception
+     *
+     * @throws Exception
+     */
     @Test
     public void getStatisticsWithException() throws Exception {
         given(statisticsService.getStatisticsForTime()).willThrow(new N26Exception("No transaction present", 2000));
         mockMvc.perform(get(URL)
                         .contentType(APPLICATION_JSON))
-                        .andExpect(status().isInternalServerError())
+                        .andExpect(status().isBadRequest())
                         .andExpect(jsonPath("$.code").value(2000))
                         .andExpect(jsonPath("$.description").value("No transaction present"));
     }

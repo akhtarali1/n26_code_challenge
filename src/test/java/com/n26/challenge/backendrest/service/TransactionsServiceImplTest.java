@@ -30,6 +30,9 @@ public class TransactionsServiceImplTest {
     @Mock
     private TransactionsRepository transactionsRepository;
 
+    /**
+     * Save transaction with all valid data
+     */
     @Test
     public void saveTransactions() {
         when(transactionsRepository.save(ArgumentMatchers.any(TransactionEntity.class))).thenReturn(new TransactionEntity());
@@ -37,6 +40,9 @@ public class TransactionsServiceImplTest {
                         transactionsService.saveTransactions(buildTransaction(11.2D, System.currentTimeMillis() - 1000)));
     }
 
+    /**
+     * Save transaction with expired timestamp
+     */
     @Test
     public void saveTransactionsWithInvalidTime() {
         assertFalse("Expected FALSE is not returned",

@@ -13,6 +13,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class BackendRestApplication {
 
+	/**
+	 * @param args main method arguments
+	 */
 	public static void main(String[] args) {
 		SpringApplication.run(BackendRestApplication.class, args);
 	}

@@ -47,6 +47,11 @@ public class TransactionControllerTest {
         }
     }
 
+    /**
+     * Post transaction with valid details
+     *
+     * @throws Exception
+     */
     @Test
     public void postTransactionsWithValidTime() throws Exception {
         given(transactionsService.saveTransactions(any(Transaction.class))).willReturn(true);
@@ -56,6 +61,11 @@ public class TransactionControllerTest {
                         .andExpect(status().isCreated());
     }
 
+    /**
+     * Post transaction with false return
+     *
+     * @throws Exception
+     */
     @Test
     public void postTransactionsWithInValidTransaction() throws Exception {
         given(transactionsService.saveTransactions(any(Transaction.class))).willReturn(false);
@@ -65,6 +75,11 @@ public class TransactionControllerTest {
                         .andExpect(status().isNoContent());
     }
 
+    /**
+     * Post transaction with exception thrown
+     *
+     * @throws Exception
+     */
     @Test
     public void postTransactionsWithException() throws Exception {
         given(transactionsService.saveTransactions(any(Transaction.class))).willThrow(new IllegalArgumentException("exception occurred"));
@@ -76,6 +91,11 @@ public class TransactionControllerTest {
                         .andExpect(jsonPath("$.description").value("exception occurred"));
     }
 
+    /**
+     * Post transaction with invalid amount(less than 0.1)
+     *
+     * @throws Exception
+     */
     @Test
     public void postTransactionsWithInValidAmount() throws Exception {
         given(transactionsService.saveTransactions(any(Transaction.class))).willReturn(true);
@@ -87,6 +107,11 @@ public class TransactionControllerTest {
                         .andExpect(jsonPath("$.description").value("amount must be greater than or equal to 0.01"));
     }
 
+    /**
+     * post transaction with invalid time stamp in milliseconds(less than 0)
+     *
+     * @throws Exception
+     */
     @Test
     public void postTransactionsWithInValidTime() throws Exception {
         given(transactionsService.saveTransactions(any(Transaction.class))).willReturn(true);

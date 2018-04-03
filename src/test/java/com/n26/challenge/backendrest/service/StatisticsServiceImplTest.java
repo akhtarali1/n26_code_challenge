@@ -36,6 +36,9 @@ public class StatisticsServiceImplTest {
         ReflectionTestUtils.setField(statisticsService, "retrievalTimeFrameInSeconds", "60");
     }
 
+    /**
+     * Get statistics for a time frame(for last 60 seconds)
+     */
     @Test
     public void getStatisticsForTime() {
         when(transactionsRepository.findStatisticsBetweenTime(anyLong(), anyLong())).thenReturn(new Statistics(10.5D, 11D, 12D, 13D, 14L));
@@ -47,6 +50,9 @@ public class StatisticsServiceImplTest {
         assertEquals("Expected count is 10.5", 14, statistics.getCount().longValue(), 0);
     }
 
+    /**
+     * Get statistics with when no transactions happened in last 60 seconds
+     */
     @Test
     public void getStatisticsForTimeWithCountZero() {
         when(transactionsRepository.findStatisticsBetweenTime(anyLong(), anyLong())).thenReturn(new Statistics(null, null, null, null, 0L));
