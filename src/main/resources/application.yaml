@@ -7,9 +7,12 @@ spring:
     driver-class-name: org.h2.Driver
     url: jdbc:h2:mem:n26
     username: sa
-    password:
+    password: sa
   liquibase:
     change-log: classpath:db/changelog/db.changelog-master.xml
+  h2:
+    console:
+      enabled: true
 
 server:
   port: 8080
