@@ -19,6 +19,11 @@
                         incrementBy="1"
                         sequenceName="N26_TRANSACTION_SEQ"
                         startValue="1"/>
+        <!-- Added index on Transaction_Time column with descending order
+            as transaction timestamp will be received in incremental order(in most cases)
+            and data is retrieved for statistics from bottom to last 60 seconds time frame
+             which will give response in same time for each statistics request-->
+        <sql>CREATE INDEX TRANSACTION_DESC_INDEX ON N26_TRANSACTIONS (TRANSACTION_TIME DESC)</sql>
 
         <rollback>
             <dropTable cascadeConstraints="true" catalogName="n26"
