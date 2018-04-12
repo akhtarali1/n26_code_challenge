@@ -113,7 +113,7 @@ public class BackendRestIntegrationTest {
                         .contentType(APPLICATION_JSON_VALUE))
                         .andExpect(status().isOk())
                         .andExpect(jsonPath("$.sum").value(54))
-                        .andExpect(jsonPath("$.avg").value(13.5))
+                        .andExpect(jsonPath("$.average").value(13.5))
                         .andExpect(jsonPath("$.max").value(15.5))
                         .andExpect(jsonPath("$.min").value(11.5))
                         .andExpect(jsonPath("$.count").value(4));
@@ -142,12 +142,32 @@ public class BackendRestIntegrationTest {
     }
 
     /**
+     * After 1st GET statistics all the transactions are removed So the next GET statistics will should return
+     *
+     * @throws Exception
+     */
+    @Test
+    public void test4CheckTransactionsIfAnyAndGetStatistics() throws Exception {
+        mvc.perform(get(STATISTICS)
+                        .contentType(APPLICATION_JSON_VALUE))
+                        .andExpect(status().isBadRequest())
+                        .andExpect(jsonPath("$.code").value(2000))
+                        .andExpect(jsonPath("$.description").value("No transactions happened in last 60 seconds"));
+    }
+
+    /**
      * Update DB with new transactions and get statistics of updated DB
      *
      * @throws Exception
      */
     @Test
-    public void test4PostTransactionAndGetStatistics() throws Exception {
+    public void test5PostTransactionAndGetStatistics() throws Exception {
+        mvc.perform(get(STATISTICS)
+                        .contentType(APPLICATION_JSON_VALUE))
+                        .andExpect(status().isBadRequest())
+                        .andExpect(jsonPath("$.code").value(2000))
+                        .andExpect(jsonPath("$.description").value("No transactions happened in last 60 seconds"));
+
         mvc.perform(post(TRANSACTIONS)
                         .contentType(APPLICATION_JSON_VALUE)
                         .content(mapper.writeValueAsString(buildTransaction(20.5D, System.currentTimeMillis()))))
@@ -160,11 +180,11 @@ public class BackendRestIntegrationTest {
         mvc.perform(get(STATISTICS)
                         .contentType(APPLICATION_JSON_VALUE))
                         .andExpect(status().isOk())
-                        .andExpect(jsonPath("$.sum").value(84))
-                        .andExpect(jsonPath("$.avg").value(14))
+                        .andExpect(jsonPath("$.sum").value(30))
+                        .andExpect(jsonPath("$.average").value(15))
                         .andExpect(jsonPath("$.max").value(20.5))
                         .andExpect(jsonPath("$.min").value(9.5))
-                        .andExpect(jsonPath("$.count").value(6));
+                        .andExpect(jsonPath("$.count").value(2));
     }
 
     private Transaction buildTransaction(double amount, long timeStamp) {

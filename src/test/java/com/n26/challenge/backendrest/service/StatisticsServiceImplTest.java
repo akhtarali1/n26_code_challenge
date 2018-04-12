@@ -9,7 +9,7 @@ import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 
 import com.n26.challenge.backendrest.domain.N26Exception;
-import com.n26.challenge.backendrest.domain.Statistics;
+import com.n26.challenge.backendrest.entity.TransactionEntity;
 import com.n26.challenge.backendrest.repository.TransactionsRepository;
 import org.junit.Before;
 import org.junit.Test;
@@ -18,6 +18,10 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.test.util.ReflectionTestUtils;
+
+import java.util.ArrayList;
+import java.util.DoubleSummaryStatistics;
+import java.util.List;
 
 /**
  * @author Akhtar on 03-Apr-18.
@@ -41,13 +45,20 @@ public class StatisticsServiceImplTest {
      */
     @Test
     public void getStatisticsForTime() {
-        when(transactionsRepository.findStatisticsBetweenTime(anyLong(), anyLong())).thenReturn(new Statistics(10.5D, 11D, 12D, 13D, 14L));
-        Statistics statistics = statisticsService.getStatisticsForTime();
-        assertEquals("Expected sum is 10.5", 10.5, statistics.getSum().doubleValue(), 0);
-        assertEquals("Expected avg is 10.5", 11, statistics.getAvg().doubleValue(), 0);
-        assertEquals("Expected max is 10.5", 12, statistics.getMax().doubleValue(), 0);
-        assertEquals("Expected min is 10.5", 13, statistics.getMin().doubleValue(), 0);
-        assertEquals("Expected count is 10.5", 14, statistics.getCount().longValue(), 0);
+        List<TransactionEntity> entityList = new ArrayList<>();
+        entityList.add(formTransactionEntity(10.5, 156456L, 1L));
+        entityList.add(formTransactionEntity(10.5, 156456L, 1L));
+        entityList.add(formTransactionEntity(10.5, 156456L, 1L));
+        entityList.add(formTransactionEntity(10.5, 156456L, 1L));
+        entityList.add(formTransactionEntity(10.5, 156456L, 1L));
+
+        when(transactionsRepository.findAllByTransactionTimeBetween(anyLong(), anyLong())).thenReturn(entityList);
+        DoubleSummaryStatistics statistics = statisticsService.getStatisticsForTime();
+        assertEquals("Expected sum is 10.5", 52.5, statistics.getSum(), 0);
+        assertEquals("Expected avg is 10.5", 10.5, statistics.getAverage(), 0);
+        assertEquals("Expected max is 10.5", 10.5, statistics.getMax(), 0);
+        assertEquals("Expected min is 10.5", 10.5, statistics.getMin(), 0);
+        assertEquals("Expected count is 10.5", 5, statistics.getCount(), 0);
     }
 
     /**
@@ -55,12 +66,20 @@ public class StatisticsServiceImplTest {
      */
     @Test
     public void getStatisticsForTimeWithCountZero() {
-        when(transactionsRepository.findStatisticsBetweenTime(anyLong(), anyLong())).thenReturn(new Statistics(null, null, null, null, 0L));
+        when(transactionsRepository.findAllByTransactionTimeBetween(anyLong(), anyLong())).thenReturn(new ArrayList<>());
         try {
             statisticsService.getStatisticsForTime();
         } catch (N26Exception e) {
             assertEquals("Expected error description is not returned", "No transactions happened in last 60 seconds", e.getError().getDescription());
             assertEquals("Expected error code is not returned", new Integer(2000), e.getError().getCode());
         }
+    }
+
+    private TransactionEntity formTransactionEntity(double amount, long time, long id) {
+        TransactionEntity entity = new TransactionEntity();
+        entity.setAmount(amount);
+        entity.setTransactionTime(time);
+        entity.setId(id);
+        return entity;
     }
 }

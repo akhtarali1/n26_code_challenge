@@ -4,11 +4,10 @@
  */
 package com.n26.challenge.backendrest.repository;
 
-import com.n26.challenge.backendrest.domain.Statistics;
 import com.n26.challenge.backendrest.entity.TransactionEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
+
+import java.util.List;
 
 /**
  * @author Akhtar on 02-Apr-18.
@@ -16,15 +15,12 @@ import org.springframework.data.repository.query.Param;
 public interface TransactionsRepository extends JpaRepository<TransactionEntity, Long> {
 
     /**
-     * Get statistics of SUM, AVG, MIN, MAX & COUNT for all transactions happened in time frame
+     * GET all transactions happened in period of time
      *
      * @param retrievalStartTime start time in milli seconds for getting statistics
      * @param retrievalEndTime   end time in milli seconds for getting statistics
-     * @return statistics for all transactions happened between time frame.
+     * @return all transactions in period of time
      */
-    @Query("select new com.n26.challenge.backendrest.domain.Statistics" +
-                    "(SUM(entity.amount), AVG(entity.amount), MAX(entity.amount), MIN(entity.amount), COUNT(entity)) from TransactionEntity entity " +
-                    "where entity.transactionTime >= :retrievalTimeStart AND entity.transactionTime < :retrievalTimeEnd")
-    Statistics findStatisticsBetweenTime(@Param("retrievalTimeStart") long retrievalStartTime, @Param("retrievalTimeEnd") long retrievalEndTime);
+    List<TransactionEntity> findAllByTransactionTimeBetween(long retrievalStartTime, long retrievalEndTime);
 
 }

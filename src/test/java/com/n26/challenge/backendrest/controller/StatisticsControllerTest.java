@@ -11,7 +11,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.n26.challenge.backendrest.domain.N26Exception;
-import com.n26.challenge.backendrest.domain.Statistics;
 import com.n26.challenge.backendrest.service.StatisticsServiceImpl;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -20,6 +19,9 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
+
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * @author Akhtar on 02-Apr-18.
@@ -41,15 +43,18 @@ public class StatisticsControllerTest {
      */
     @Test
     public void getStatistics() throws Exception {
-        given(statisticsService.getStatisticsForTime()).willReturn(new Statistics(10.5D, 10.6D, 10.4D, 10.3D, 10L));
+        List<Double> records = Arrays.asList(10.3, 10.3, 10.4, 10.5);
+        given(statisticsService.getStatisticsForTime()).willReturn(records.stream()
+                                                                    .mapToDouble((x) -> x)
+                                                                    .summaryStatistics());
         mockMvc.perform(get(URL)
                         .contentType(APPLICATION_JSON))
                         .andExpect(status().isOk())
-                        .andExpect(jsonPath("$.sum").value(10.5))
-                        .andExpect(jsonPath("$.avg").value(10.6))
-                        .andExpect(jsonPath("$.max").value(10.4))
+                        .andExpect(jsonPath("$.sum").value(41.5))
+                        .andExpect(jsonPath("$.average").value(10.375))
+                        .andExpect(jsonPath("$.max").value(10.5))
                         .andExpect(jsonPath("$.min").value(10.3))
-                        .andExpect(jsonPath("$.count").value(10));
+                        .andExpect(jsonPath("$.count").value(4));
     }
 
     /**
